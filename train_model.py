@@ -6,18 +6,19 @@ from langchain.schema import AIMessage
 from langchain.adapters.openai import convert_message_to_dict
 import openai
 from openai import OpenAI
-import os 
-from dotenv import dotenv_values
+import os, sys
+from dotenv import load_dotenv
 
-os.environ["OPENAI_API_KEY"] = ""
+load_dotenv()
+# os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
+# print(os.getenv("OPENAI_API_KEY"))
 
 if __name__=="__main__":
 
     # prepare the data into fine-tune format
 
-    with open('dataset_elon_tweets.json') as f:
-        data = json.load(f)
-
+    with open('dataset_elon_tweets.json', "r", encoding="utf-8") as f:
+        data = json.load(f)        
 
     tweets = [ d["full_text"] for d in data if "t.co" not in d["full_text"]]
     # print(tweets)
@@ -29,6 +30,7 @@ if __name__=="__main__":
     data = [[system_message, convert_message_to_dict(m)] for m in messages]
 
     # print(data)
+    # sys.exit()
 
     # prepare a fine-tuning file
 
