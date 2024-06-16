@@ -1,22 +1,26 @@
 # pip install openai langchain streamlit streamlit_feedback langsmith langchain-openai
 # make sure to create an api in langchain smith console
 
-import os 
+import os, sys
 import langchain
 import streamlit as st
-from langchain.prompts import ChatPromptTemplate
-from langchain.schema.output_parser import StrOutputParser
-from langchain.callbacks.tracers.langchain import wait_for_all_tracers
-from langchain.callbacks.tracers.run_collector import RunCollectorCallbackHandler
-from langchain.schema.runnable import RunnableConfig
 from langsmith import Client
 from streamlit_feedback import streamlit_feedback
 
 from langchain_openai import ChatOpenAI
+from dotenv import load_dotenv
+from langchain_core.output_parsers import StrOutputParser
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.runnables import RunnableConfig
+from langchain_core.tracers.langchain import wait_for_all_tracers
+from langchain_core.tracers.run_collector import RunCollectorCallbackHandler
 
-client = Client(api_key='')
+load_dotenv()
 
-os.environ["OPENAI_API_KEY"] = ""
+client = Client(api_key=os.environ["api_key"])
+
+# os.environ["OPENAI_API_KEY"] = ""
+sys.exit
 
 if "run_id" not in st.session_state:
     st.session_state.run_id = None
@@ -35,7 +39,7 @@ normal_chain = (
 
 chain = (
     ChatPromptTemplate.from_messages([("system", "write a tweet about {topic}") ])
-    | ChatOpenAI(model="ft:gpt-3.5-turbo-0613:klickanalytics:elon-twitter:8rd7TisI")
+    | ChatOpenAI(model="ft:gpt-3.5-turbo-0125:personal:elon-twitter:9aW32rvB")
     | StrOutputParser()
 )
 
